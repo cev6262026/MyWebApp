@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Descargar el código del repositorio
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # 2. Instalar y configurar .NET SDK
+      - name: Configurar .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # 3. Mostrar la versión instalada
+      - name: Verificar versión de .NET
+        run: dotnet --version
+
+      # 4. Restaurar las dependencias NuGet
+      - name: Restaurar dependencias
+        run: dotnet restore
+
+      # 5. Compilar la aplicación
+      - name: Compilar aplicación
+        run: dotnet build --configuration Release --no-restore
+
+      # 6. Ejecutar las pruebas
+      - name: Ejecutar pruebas
+        run: dotnet test --configuration Release --no-build
